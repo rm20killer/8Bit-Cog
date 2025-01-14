@@ -11,7 +11,6 @@ class confirm(View):
 
     @discord.ui.button(label="Mark as resolved", style=ButtonStyle.danger, custom_id="ReportClose")
     async def confirm(self, interaction: Interaction, button: Button) -> None:
-        await interaction.response.deferUpdate()  # Acknowledge the interaction
 
         if interaction.user.get_role(726137282104524871): 
             if interaction.channel.is_thread():
@@ -68,34 +67,29 @@ class ticket(commands.Cog):
                 print('Cancelled')
 
             if ping_tag_id in thread.applied_tags:
-                await self.serverPing(thread)
-
-    async def serverPing(self, thread):
-
-        await thread.send("Thanks for creating a crash report, a tech staff will check on this as soon as possible")
-        embed = Embed(title="Server Status", description="Crash Report", color=0x0099ff)
-        for port, name in self.ports.items():
-            try:
-                server = JavaServer.lookup(f"{self.ip}:{port}")
-                status = await server.async_status()
-                embed.add_field(name=f"{name} Status", value="Online", inline=True)
-                embed.add_field(name=f"{name} Players", value=f"{status.players.online}/{status.players.max}", inline=True)
-                embed.add_field(name=f"{name} Ping", value=f"{status.latency} ms", inline=True)
-            except Exception as e:
-                embed.add_field(name=f"{name} Status", value="Offline", inline=True)
-                print(f"Error getting status for {name}: {e}")
-        try:
-            channel = await self.bot.fetch_channel(self.server_chat_id)
-            topic = channel.topic
-            topic_array = topic.split("|")
-            if len(topic_array) == 4:
-                online_for = topic_array[2]
-                embed.add_field(name="Online For", value=online_for, inline=True)
-            else:
-                embed.add_field(name="Online For", value="Cant get data (Offline?)", inline=True)
-        except Exception as e:
-            print(f"Error getting server chat topic: {e}")
-            embed.add_field(name="Online For", value="Cant get data (Offline?)", inline=True)
-        embed.timestamp = thread.created_at
-        await thread.send(embed=embed)
-        pass
+                await thread.send("Thanks for creating a crash report, a tech staff will check on this as soon as possible")
+                embed = Embed(title="Server Status", description="Crash Report", color=0x0099ff)
+                for port, name in self.ports.items():
+                    try:
+                        server = JavaServer.lookup(f"{self.ip}:{port}")
+                        status = await server.async_status()
+                        embed.add_field(name=f"{name} Status", value="Online", inline=True)
+                        embed.add_field(name=f"{name} Players", value=f"{status.players.online}/{status.players.max}", inline=True)
+                        embed.add_field(name=f"{name} Ping", value=f"{status.latency} ms", inline=True)
+                    except Exception as e:
+                        embed.add_field(name=f"{name} Status", value="Offline", inline=True)
+                        print(f"Error getting status for {name}: {e}")
+                try:
+                    channel = await self.bot.fetch_channel(self.server_chat_id)
+                    topic = channel.topic
+                    topic_array = topic.split("|")
+                    if len(topic_array) == 4:
+                        online_for = topic_array[2]
+                        embed.add_field(name="Online For", value=online_for, inline=True)
+                    else:
+                        embed.add_field(name="Online For", value="Cant get data (Offline?)", inline=True)
+                except Exception as e:
+                    print(f"Error getting server chat topic: {e}")
+                    embed.add_field(name="Online For", value="Cant get data (Offline?)", inline=True)
+                embed.timestamp = thread.created_at
+                await thread.send(embed=embed)
