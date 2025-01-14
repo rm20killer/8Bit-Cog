@@ -19,7 +19,7 @@ class ticket(commands.Cog):
         self.server_chat_id = 581520306984845324 
 
     @discord.ui.button(label="Mark as resolved", style=ButtonStyle.danger, custom_id="ReportClose")
-    async def confirm(self, interaction: Interaction, button: Button):
+    async def confirm(self, interaction: Interaction, button: Button) -> None:
         await interaction.response.send_message("Marked as resolved!", ephemeral=True)
         self.value = True
         self.stop()
