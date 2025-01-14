@@ -1,6 +1,6 @@
 from discord import ButtonStyle, Interaction
 from discord.ui import Button, View
-from mcstatus import MinecraftServer
+from mcstatus import MinecraftServerY
 from redbot.core import commands, app_commands
 
 class ticket(commands.Cog):
