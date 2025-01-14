@@ -1,6 +1,6 @@
 from discord import ButtonStyle, Interaction
 from discord.ui import Button, View
-from mcstatus import MinecraftServerY
+from mcstatus import JavaServer
 from redbot.core import commands, app_commands
 
 class ticket(commands.Cog):
@@ -80,7 +80,7 @@ class ticket(commands.Cog):
         embed = Embed(title="Server Status", description="Crash Report", color=0x0099ff)
         for port, name in self.ports.items():
             try:
-                server = MinecraftServer.lookup(f"{self.ip}:{port}")
+                server = JavaServer.lookup(f"{self.ip}:{port}")
                 status = await server.async_status()
                 embed.add_field(name=f"{name} Status", value="Online", inline=True)
                 embed.add_field(name=f"{name} Players", value=f"{status.players.online}/{status.players.max}", inline=True)
