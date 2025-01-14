@@ -19,7 +19,7 @@ class ticket(commands.Cog):
         self.server_chat_id = 581520306984845324 
 
     @discord.ui.button(label="Mark as resolved", style=ButtonStyle.danger, custom_id="ReportClose")
-    async def ReportClose(self, interaction: Interaction, button: Button):
+    async def confirm(self, interaction: Interaction, button: Button):
         await interaction.response.send_message("Marked as resolved!", ephemeral=True)
         self.value = True
         self.stop()
@@ -41,7 +41,7 @@ class ticket(commands.Cog):
             await ctx.send("This command can only be used in the tech support category", ephemeral=True)
             return
 
-        view = ReportClose()
+        view = confirm()
         await ctx.send("To close this click the button (tech only)", view=view)
         await view.wait()
 
@@ -61,7 +61,7 @@ class ticket(commands.Cog):
         ping_tag_id = 1054839593947643984  #Tag for server crash to ping the server
 
         if thread.parent_id == tech_support_category_id:
-            view = ReportClose()
+            view = confirm()
             await thread.send(f"<@&{tech_role_id}>")
             await thread.send("To close this click the button (tech only)", view=view)
             await view.wait()
