@@ -11,7 +11,23 @@ class confirm(View):
 
     @discord.ui.button(label="Mark as resolved", style=ButtonStyle.danger, custom_id="ReportClose")
     async def confirm(self, interaction: Interaction, button: Button) -> None:
-        await interaction.response.send_message("Marked as resolved!", ephemeral=True)
+        await interaction.response.deferUpdate()  # Acknowledge the interaction
+
+        if interaction.user.get_role(726137282104524871): 
+            if interaction.channel.is_thread():
+                newTags = interaction.channel.applied_tags
+                resolved_tag_id = 1055496168509034497 
+                if resolved_tag_id not in newTags:
+                    newTags.append(discord.Object(resolved_tag_id)) 
+                
+                await interaction.channel.edit(applied_tags=newTags)
+                await interaction.editReply(content="This thread has been marked as resolved", components=[])
+                await interaction.channel.set_locked(True)
+                await interaction.channel.set_archived(True)
+            else:
+                await interaction.editReply(content="This is not a thread", components=[])
+        else:
+            await interaction.reply(content="You do not have permission to close this thread", components=[], ephemeral=True)
         self.value = True
         self.stop()
 
@@ -52,9 +68,9 @@ class ticket(commands.Cog):
                 print('Cancelled')
 
             if ping_tag_id in thread.applied_tags:
-                await self.serverPing(self.bot, thread)
+                await self.serverPing(thread)
 
-    async def serverPing(self, client, thread):
+    async def serverPing(self, thread):
 
         await thread.send("Thanks for creating a crash report, a tech staff will check on this as soon as possible")
         embed = Embed(title="Server Status", description="Crash Report", color=0x0099ff)
