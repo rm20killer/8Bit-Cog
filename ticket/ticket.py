@@ -13,18 +13,15 @@ class confirm(View):
     async def confirm(self, interaction: Interaction, button: Button) -> None:
 
         if interaction.user.get_role(726137282104524871): 
-            if interaction.channel.is_thread():
-                newTags = interaction.channel.applied_tags
-                resolved_tag_id = 1055496168509034497 
-                if resolved_tag_id not in newTags:
-                    newTags.append(discord.Object(resolved_tag_id)) 
-                
-                await interaction.channel.edit(applied_tags=newTags)
-                await interaction.editReply(content="This thread has been marked as resolved", components=[])
-                await interaction.channel.set_locked(True)
-                await interaction.channel.set_archived(True)
-            else:
-                await interaction.editReply(content="This is not a thread", components=[])
+            newTags = interaction.channel.applied_tags
+            resolved_tag_id = 1055496168509034497 
+            if resolved_tag_id not in newTags:
+                newTags.append(discord.Object(resolved_tag_id)) 
+
+            await interaction.channel.edit(applied_tags=newTags)
+            await interaction.editReply(content="This thread has been marked as resolved", components=[])
+            await interaction.channel.set_locked(True)
+            await interaction.channel.set_archived(True)
         else:
             await interaction.reply(content="You do not have permission to close this thread", components=[], ephemeral=True)
         self.value = True
