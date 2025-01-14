@@ -24,34 +24,6 @@ class ticket(commands.Cog):
         self.value = True
         self.stop()
 
-    @app_commands.command()
-    @app_commands.describe(close="close a tech support thread (tech only)")
-    async def close(self, interaction: discord.Interaction):
-        """Close a tech support thread."""
-
-        # Check if the user has the tech role
-        tech_role_id = 726137282104524871 
-        if tech_role_id not in [role.id for role in interaction.author.roles]:
-            await interaction.response.send_message("You do not have permission to use this command", ephemeral=True)
-            return
-
-        # Check if the thread is in the correct category
-        tech_support_category_id = 1054839141118001203  
-        if interaction.channel.category_id != tech_support_category_id:
-            await interaction.response.send_message("This command can only be used in the tech support category", ephemeral=True)
-            return
-
-        view = confirm()
-        await interaction.response.send_message("To close this click the button (tech only)", view=view)
-        await view.wait()
-
-        if view.value is None:
-            print('Timeout')
-        elif view.value:
-            print('Confirmed')
-        else:
-            print('Cancelled')
-
     @commands.Cog.listener()
     async def on_thread_create(self, thread):
         """Send a message and a button when a thread is created in the specified category."""
