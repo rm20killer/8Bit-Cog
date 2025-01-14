@@ -19,13 +19,13 @@ class ticket(commands.Cog):
         self.server_chat_id = 581520306984845324 
 
     @discord.ui.button(label="Mark as resolved", style=ButtonStyle.danger, custom_id="ReportClose")
-    async def confirm(self, interaction: Interaction, button: Button):
+    async def ReportClose(self, interaction: Interaction, button: Button):
         await interaction.response.send_message("Marked as resolved!", ephemeral=True)
         self.value = True
         self.stop()
 
     @app_commands.command()
-    @app_commands.guild_only()
+    @app_commands.describe(close="close a tech support thread (tech only)")
     async def close(self, ctx: commands.Context):
         """Close a tech support thread."""
 
