@@ -17,7 +17,7 @@ class ticket(commands.Cog):
         }
         self.server_chat_id = 581520306984845324 
 
-    @Button(label="Mark as resolved", style=ButtonStyle.danger, custom_id="ReportClose")
+    @discord.ui.button(label="Mark as resolved", style=ButtonStyle.danger, custom_id="ReportClose")
     async def confirm(self, interaction: Interaction, button: Button):
         await interaction.response.send_message("Marked as resolved!", ephemeral=True)
         self.value = True
@@ -51,7 +51,7 @@ class ticket(commands.Cog):
             print('Cancelled')
 
     @commands.Cog.listener()
-    async def on_thread_create(self, thread: Thread):
+    async def on_thread_create(self, thread):
         """Send a message and a button when a thread is created in the specified category."""
 
         tech_role_id = 726137282104524871  
