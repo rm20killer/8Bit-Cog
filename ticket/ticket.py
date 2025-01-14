@@ -24,7 +24,9 @@ class ticket(commands.Cog):
         self.value = True
         self.stop()
 
-    @commands.command()
+    @app_commands.command()
+    @app_commands.guild_only()
+    @app_commands.describe(close="close a tech support thread (tech only)")
     async def close(self, ctx: commands.Context):
         """Close a tech support thread."""
 
