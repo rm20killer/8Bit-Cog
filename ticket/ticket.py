@@ -1,3 +1,4 @@
+import discord
 from discord import ButtonStyle, Interaction
 from discord.ui import Button, View
 from mcstatus import JavaServer
