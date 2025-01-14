@@ -4,6 +4,18 @@ from discord.ui import Button, View
 from mcstatus import JavaServer
 from redbot.core import commands, app_commands
 
+class confirm(View):
+    def __init__(self):
+        super().__init__()
+        self.value = None
+
+    @discord.ui.button(label="Mark as resolved", style=ButtonStyle.danger, custom_id="ReportClose")
+    async def confirm(self, interaction: Interaction, button: Button) -> None:
+        await interaction.response.send_message("Marked as resolved!", ephemeral=True)
+        self.value = True
+        self.stop()
+
+
 class ticket(commands.Cog):
     """Custom Thread ticket system"""
 
@@ -17,12 +29,6 @@ class ticket(commands.Cog):
             25530: "Plotworld"
         }
         self.server_chat_id = 581520306984845324 
-
-    @discord.ui.button(label="Mark as resolved", style=ButtonStyle.danger, custom_id="ReportClose")
-    async def confirm(self, interaction: Interaction, button: Button) -> None:
-        await interaction.response.send_message("Marked as resolved!", ephemeral=True)
-        self.value = True
-        self.stop()
 
     @commands.Cog.listener()
     async def on_thread_create(self, thread):
