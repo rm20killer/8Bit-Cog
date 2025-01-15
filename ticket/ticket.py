@@ -55,7 +55,7 @@ class ticket(commands.Cog):
 
         if thread.parent_id == tech_support_category_id:
             view = confirm()
-            await thread.send(f"<@&{tech_role_id}>")
+            #await thread.send(f"<@&{tech_role_id}>")
             await thread.send("To close this click the button (tech only)", view=view)
 
             #await thread.send("Thanks for creating a bug report, a tech staff will check on this as soon as possible")
