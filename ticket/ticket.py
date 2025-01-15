@@ -13,14 +13,8 @@ class confirm(View):
     async def confirm(self, interaction: discord.Interaction, button: discord.Button) -> None:
         try:
             if interaction.user.get_role(726137282104524871):
-                newTags = interaction.channel.applied_tags
                 resolved_tag_id = 1055496168509034497
-                resolved_tag = interaction.guild.get_tag(resolved_tag_id)  # Fetch the tag object
-
-                if resolved_tag not in newTags:
-                    newTags.append(resolved_tag)
-
-                await interaction.channel.edit(applied_tags=newTags)
+                await interaction.channel.add_tags(resolved_tag_id)
                 await interaction.response.edit_message(content="This thread has been marked as resolved", components=[]) 
                 await interaction.channel.set_locked(True)
                 await interaction.channel.set_archived(True)
