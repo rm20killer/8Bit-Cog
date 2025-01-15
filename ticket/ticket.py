@@ -14,7 +14,9 @@ class confirm(View):
         try:
             if interaction.user.get_role(726137282104524871):
                 resolved_tag_id = 1055496168509034497
-                await interaction.channel.add_tags(resolved_tag_id)
+                resolved_tag = interaction.channel.parent.get_tag(resolved_tag_id)  # Fetch the tag object
+
+                await interaction.channel.add_tags(resolved_tag)
                 await interaction.response.edit_message(content="This thread has been marked as resolved", components=[]) 
                 await interaction.channel.set_locked(True)
                 await interaction.channel.set_archived(True)
