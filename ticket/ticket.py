@@ -17,7 +17,9 @@ class confirm(View):
                 resolved_tag = interaction.channel.parent.get_tag(resolved_tag_id)  # Fetch the tag object
 
                 await interaction.channel.add_tags(resolved_tag)
-                await interaction.response.edit_message(content="This thread has been marked as resolved", components=[]) 
+                await interaction.response.edit_message(content="This thread has been marked as resolved", view=None) 
+                await interaction.response.send_message(content="This thread has been marked as resolved", ephemeral=True)
+
                 await interaction.channel.set_locked(True)
                 await interaction.channel.set_archived(True)
             else:
@@ -53,7 +55,7 @@ class ticket(commands.Cog):
 
         if thread.parent_id == tech_support_category_id:
             view = confirm()
-            #await thread.send(f"<@&{tech_role_id}>")
+            await thread.send(f"<@&{tech_role_id}>")
             await thread.send("To close this click the button (tech only)", view=view)
             await view.wait()
 
@@ -64,7 +66,10 @@ class ticket(commands.Cog):
             else:
                 print('Cancelled')
 
-            if ping_tag_id in thread.applied_tags:
+            await thread.send("Thanks for creating a bug report, a tech staff will check on this as soon as possible")
+
+
+"""             if ping_tag_id in thread.applied_tags:
                 await thread.send("Thanks for creating a crash report, a tech staff will check on this as soon as possible")
                 embed = Embed(title="Server Status", description="Crash Report", color=0x0099ff)
                 for port, name in self.ports.items():
@@ -92,5 +97,5 @@ class ticket(commands.Cog):
                 embed.timestamp = thread.created_at
                 await thread.send(embed=embed)
             else:
-                await thread.send("Thanks for creating a bug report, a tech staff will check on this as soon as possible")
+                await thread.send("Thanks for creating a bug report, a tech staff will check on this as soon as possible") """
 
