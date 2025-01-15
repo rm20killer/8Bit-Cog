@@ -10,22 +10,27 @@ class confirm(View):
         self.value = None
 
     @discord.ui.button(label="Mark as resolved", style=ButtonStyle.danger, custom_id="ReportClose")
-    async def confirm(self, interaction: Interaction, button: Button) -> None:
+    async def confirm(self, interaction: discord.Interaction, button: discord.Button) -> None:
+        try:
+            if interaction.user.get_role(726137282104524871):
+                newTags = interaction.channel.applied_tags
+                resolved_tag_id = 1055496168509034497
+                resolved_tag = interaction.guild.get_tag(resolved_tag_id)  # Fetch the tag object
 
-        if interaction.user.get_role(726137282104524871): 
-            newTags = interaction.channel.applied_tags
-            resolved_tag_id = 1055496168509034497 
-            if resolved_tag_id not in newTags:
-                newTags.append(discord.Object(resolved_tag_id)) 
+                if resolved_tag not in newTags:
+                    newTags.append(resolved_tag)
 
-            await interaction.channel.edit(applied_tags=newTags)
-            await interaction.editReply(content="This thread has been marked as resolved", components=[])
-            await interaction.channel.set_locked(True)
-            await interaction.channel.set_archived(True)
-        else:
-            await interaction.reply(content="You do not have permission to close this thread", components=[], ephemeral=True)
-        self.value = True
-        self.stop()
+                await interaction.channel.edit(applied_tags=newTags)
+                await interaction.response.edit_message(content="This thread has been marked as resolved", components=[]) 
+                await interaction.channel.set_locked(True)
+                await interaction.channel.set_archived(True)
+            else:
+                await interaction.response.send_message(content="You do not have permission to close this thread", ephemeral=True)
+        except discord.HTTPException as e:
+            await interaction.response.send_message(f"An error occurred: {e}", ephemeral=True)
+        finally:
+            self.value = True
+            self.stop() 
 
 
 class ticket(commands.Cog):
@@ -52,7 +57,7 @@ class ticket(commands.Cog):
 
         if thread.parent_id == tech_support_category_id:
             view = confirm()
-            await thread.send(f"<@&{tech_role_id}>")
+            #await thread.send(f"<@&{tech_role_id}>")
             await thread.send("To close this click the button (tech only)", view=view)
             await view.wait()
 
@@ -90,3 +95,6 @@ class ticket(commands.Cog):
                     embed.add_field(name="Online For", value="Cant get data (Offline?)", inline=True)
                 embed.timestamp = thread.created_at
                 await thread.send(embed=embed)
+            else:
+                await thread.send("Thanks for creating a bug report, a tech staff will check on this as soon as possible")
+
